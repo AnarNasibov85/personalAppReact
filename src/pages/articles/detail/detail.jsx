@@ -1,74 +1,104 @@
-import { Box,  Button,  Image, SimpleGrid, Text } from '@chakra-ui/react';
+import { Box, Button, Image, SimpleGrid, Text } from '@chakra-ui/react';
 import Header from '../../../components/Header/Header';
 
-import {  useParams,useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useFetchData } from '../../../hooks/useFetchData';
 import { getBlogId } from '../../../services/articles';
 import Loading from '../../../components/Loading/loading';
 import { convertTime } from '../../../utills/convertTime';
-const ArticleDetailPage = () => {
+import { AddIcon, MinusIcon } from '@chakra-ui/icons';
+// import { useGlobalStore } from '../../../Store/Global/GlobalProvider';
+// import { TYPES } from '../../../Store/Global/type';
+import NavigationShow from '../../../components/NavigationShow/NavigationShow';
+import { useTitle } from '../../../hooks/useTitle';
+import { useSelector } from 'react-redux';
+import { toggleFavorite } from '../../../redux/global/globalSlice';
+import { useDispatch } from 'react-redux';
+
+function ArticleDetailPage() {
   const { id } = useParams();
-  console.log('a',id);
+  const favorites = useSelector((state) => state.global.favorites);
+
+  const dispatch = useDispatch();
+
+  // const { dispatch } = useGlobalStore();
 
   const { data, loading } = useFetchData({
     requestFn: () => getBlogId(id),
     dependecy: [id],
   });
 
-  const navigate = useNavigate();
+  useTitle(`${data?.title} | Blog app`);
+
+  const isFav = favorites.find((item) => item.id == id);
+
+  const handleToggleFav = async () => {
+    dispatch(toggleFavorite({id, data }));
+  };
 
   return (
     <>
       <Header />
+      <NavigationShow routes={['Articles', data?.title]} />
       {loading ? (
         <Loading />
       ) : (
-        data && (
-          <SimpleGrid
-            columns={{ sm: 2 }}
-            spacing='8'
-            p='10'
+        <SimpleGrid
+          bg='gray.50'
+          columns={{ sm: 2 }}
+          spacing='2'
+          p='10'
+        >
+          <Box>
+            <Image
+              src={data?.cover_url}
+              alt={data?.title}
+            />
+          </Box>
+          <Box
+            display='flex'
+            flexDirection='column'
+            justifyContent='flex-start'
+            gap='16px'
           >
-            <Box>
-              <Image
-                src={data?.cover_url}
-                alt={data?.title}
-              />
-            </Box>
-            
-            <Box>
-              <Text
-                bgClip='text'
-                fontSize='6xl'
-                fontWeight='extrabold'
-                color='black'
-              >
-                <Text bgClip='text' fontSize='md' fontWeight='medium' color='gray'>
-             {convertTime (parseInt(data?.created))}
+            <Text
+              bgClip='text'
+              fontSize='md'
+              fontWeight='medium'
+              color='gray'
+            >
+              {convertTime(parseInt(data?.time))}
             </Text>
-                {data?.title}
-              </Text>
-             
-              <Text
-                bgClip='text'
-                fontSize='2xl'
-                fontWeight='medium'
-                color='black'
-              >
-                {data?.desc}
-              </Text>
-              <Button
-                colorScheme='teal'
-                onClick={() => navigate(-1)}
-              >
-                Go Back
-              </Button>
-            </Box>
-          </SimpleGrid>
-        )
+            <Text
+              bgClip='text'
+              fontSize='2xl'
+              fontWeight='extrabold'
+              color='black'
+            >
+              {data?.title}
+            </Text>
+
+            <Text
+              bgClip='text'
+              fontSize='lg'
+              fontWeight='medium'
+              color='gray'
+            >
+              {data?.desc}
+            </Text>
+            <Button
+              alignSelf='flex-start'
+              leftIcon={isFav ? <MinusIcon /> : <AddIcon />}
+              colorScheme={isFav ? 'red' : 'teal'}
+              onClick={handleToggleFav}
+            >
+              {isFav ? 'Remove' : 'Add'} Favorites
+            </Button>
+          </Box>
+        </SimpleGrid>
       )}
     </>
   );
-};
+}
 
 export default ArticleDetailPage;

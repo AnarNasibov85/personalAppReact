@@ -20,7 +20,7 @@ const HomePage = () => {
   fontWeight="extrabold"
   color='black'
 >
-Welcome to  our website!
+WELCOME TO MY WEBSITE!
 </Text>
 <Text
   // bgGradient="linear(to-l, #7928CA, #FF0080)"
@@ -30,13 +30,12 @@ Welcome to  our website!
   fontWeight="medium"
   color='black'
 >
-Here you can find information about the company and its services. You will also be able to make an 
-Here you can find information about the company and its services. You will also be able to make an
+You can easily travel the whole world with us, book hotels and tickets in advance, our main goal is to satisfy all our customers. Our priority is always to make our work better!
 </Text>
-<Button backgroundColor='#6B46C1'onClick={()=>navigate(ROUTER.ARTICLES_CREATE)}>Get Started</Button>
+<Button backgroundColor='green'onClick={()=>navigate(ROUTER.ARTICLES_CREATE)}>Get Started</Button>
 </Box>
 <Box >
-  <Image  src='https://www.needgrammar.com/res/imgs/Articles-in-English.jpg'/>
+  <Image  src='https://static.octoparse.com/en/20230412122755896-scaled.jpg'/>
 </Box>
 
 {/* </Box> */}

@@ -1,7 +1,9 @@
 export const ROUTER = {
   HOME: '/',
   ARTICLES: '/articles',
-  ARTICLES_CREATE: '/article-create',
-  ABOUT: '/about',
-  FAQ: '/FAQ',
+  FAV:"/favorites",
+  ARTICLES_CREATE: '/article-edit',
+  ABOUT: '/about-us',
+  FAQ: '/faq',
+  SETTING: "/setting",
 };

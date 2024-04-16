@@ -1,56 +1,64 @@
 import {
   Button,
-  ButtonGroup,
   Card,
   CardBody,
   CardFooter,
-  Divider,
   Heading,
   Image,
   Stack,
   Text,
 } from '@chakra-ui/react';
 import { shortText } from '../../utills/shortText';
+import { categories } from '../../constant/Categories';
 
-const BlogCard = ({ title, cover_url, desc, onReadMore }) => {
+const BlogCard = ({ title, cover_url, desc, onReadMore, category }) => {
+  
+  const blogCategory = categories.find((item) => item.id === category) || {
+    title: 'Default Category',
+  };
+
   return (
-    <div>
-      <Card maxW='sm'>
+    <Card
+      direction={{ base: 'column', sm: 'row' }}
+      overflow='hidden'
+      variant='outline'
+     
+    >
+      <Image
+        objectFit='cover'
+        maxW={{ base: '100%', sm: '200px' }}
+        src={cover_url}
+        alt={title}
+      />
+
+      <Stack>
         <CardBody>
-          <Image
-            src={cover_url}
-            alt={title}
-            borderRadius='lg'
-          />
-          <Stack
-            mt='6'
-            spacing='3'
+          <Heading
+            size='sm'
+            color='green'
           >
-            <Heading size='md'>{title}</Heading>
-            <Text>{shortText(desc,60)}</Text>
-            {/* <Text color='blue.600' fontSize='2xl'>
-        $450
-      </Text> */}
-          </Stack>
+            Category: {blogCategory.title}
+          </Heading>
+          <Heading
+            size='md'
+            py='2'
+          >
+            {title}
+          </Heading>
+          <Text>{shortText(desc, 80)}</Text>
         </CardBody>
-        <Divider />
+
         <CardFooter>
-          <ButtonGroup spacing='2'>
-            <Button
-              variant='solid'
-              colorScheme='teal'
-              onClick={onReadMore}
-            >
-              Read More
-            </Button>
-            {/* <Button variant='ghost' colorScheme='blue'>
-        Add to cart
-      </Button> */}
-          </ButtonGroup>
+          <Button
+            variant='solid'
+            colorScheme='teal'
+            onClick={onReadMore}
+          >
+            Read more
+          </Button>
         </CardFooter>
-      </Card>
-    </div>
+      </Stack>
+    </Card>
   );
 };
-
 export default BlogCard;
